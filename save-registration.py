@@ -22,22 +22,14 @@ choicesYear = list(range(thisYear-100, thisYear+1))
 titelLabel = tk.Label(text="Informatie Formulier", font=("Calibri Light", 14))
 titelLabel.pack(fill="x")
 
+# Checkt of de map databron bestaat, zo niet maakt het programma deze aan.
+# Iedere registratie in een apart bestand in JSON format in de data word opgeslagen.
+# Sla de velden/keys die je gebruikt om de json op te bouwen in een YAML file op.
+
+
 def destroyWidgets():
-    naamLabel.destroy()
-    naamEntry.destroy()
-    emailLabel.destroy()
-    emailEntry.destroy()
-    geboorteLabel.destroy()
-    geboorteCombo.destroy()
-    geslachtLabel.destroy()
-    geslachtRadio.destroy()
-    geslachtRadio2.destroy()
-    verenigingLabel.destroy()
-    verenigingCombo.destroy()
-    sportLabel.destroy()
-    sportEntry.destroy()
-    btn.destroy()
-    titelLabel.configure(text="Informatie Formulier Resultaat")
+    for widget in window.winfo_children():
+        widget.destroy()
     FormulierControle()
 
 def FormulierControle():
@@ -57,7 +49,6 @@ def FormulierControle():
     regestratieCode.pack(side="bottom")
 
 def createCode():
-    global code
     geboorte = geboorteVar.get()
     geslacht = geslachtVar.get()
     sport = sportVar.get()
@@ -93,8 +84,8 @@ geslachtLabel = tk.Label(text="Wat is uw geslacht?")
 geslachtLabel.pack()
 geslachtRadio = tk.Radiobutton(text="Man", value="Man",variable=geslachtVar)
 geslachtRadio.pack()
-geslachtRadio2 = tk.Radiobutton(text="Vrouw", value="Vrouw",variable=geslachtVar)
-geslachtRadio2.pack()
+geslachtRadio = tk.Radiobutton(text="Vrouw", value="Vrouw",variable=geslachtVar)
+geslachtRadio.pack()
 
 verenigingLabel = tk.Label(text="Bent u lid van een sportvereniging?")
 verenigingLabel.pack()
