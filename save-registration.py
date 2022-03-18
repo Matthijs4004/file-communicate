@@ -1,4 +1,4 @@
-import os
+import os, yaml, json
 import datetime as dt
 import tkinter as tk
 from tkinter import ttk
@@ -12,7 +12,7 @@ verenigingVal = ["Ja", "Nee"]
 code = ""
 naamVar = tk.StringVar()
 emailVar = tk.StringVar()
-geboorteVar = tk.StringVar()
+geboorteVar = tk.IntVar()
 geslachtVar = tk.StringVar()
 verenigingVar = tk.StringVar()
 sportVar = tk.StringVar()
@@ -26,7 +26,6 @@ titelLabel.pack(fill="x")
 # Iedere registratie in een apart bestand in JSON format in de data word opgeslagen.
 # Sla de velden/keys die je gebruikt om de json op te bouwen in een YAML file op.
 
-
 def destroyWidgets():
     for widget in window.winfo_children():
         widget.destroy()
@@ -38,24 +37,40 @@ def FormulierControle():
     naamResult.pack()
     emailResult = tk.Label(text="Email: " + emailVar.get(),font=("Calibri Light", 12))
     emailResult.pack()
-    geboorteResult = tk.Label(text="Geboortejaar: " + geboorteVar.get(),font=("Calibri Light", 12))
+    geboorteResult = tk.Label(text="Geboortejaar: " + str(geboorteVar.get()),font=("Calibri Light", 12))
     geboorteResult.pack()
     geslachtResult = tk.Label(text="Geslacht: " + geslachtVar.get(),font=("Calibri Light", 12))
     geslachtResult.pack()
-    sportResult = tk.Label(text="Sport: " + sportVar.get(),font=("Calibri Light", 12))
-    sportResult.pack()
+    if sportVar.get() != "":
+        sportResult = tk.Label(text="Sport: " + sportVar.get(),font=("Calibri Light", 12))
+        sportResult.pack()
     createCode()
     regestratieCode = tk.Label(text="Regestratie Code: " + code,font=("Calibri Light", 10))
     regestratieCode.pack(side="bottom")
 
+    with open(r"C:\Projecten\Software Dev\Mapje 9\file-communicate\settings.yml", "r") as file:
+        yamlSave = yaml.safe_load(file)
+    
+    jsonDump = {yamlSave["one"] : naamVar.get(), 
+                yamlSave["two"] : emailVar.get(), 
+                yamlSave["three"] : geboorteVar.get(),
+                yamlSave["four"] :  geslachtVar.get()}
+
+    if not os.path.exists(r"C:\Projecten\Software Dev\Mapje 9\file-communicate\databron"):
+        os.mkdir(r"C:\Projecten\Software Dev\Mapje 9\file-communicate\databron")
+
+    with open(r"C:\Projecten\Software Dev\Mapje 9\file-communicate\databron\databron"+code+".json", "a") as file:
+        file.write(json.dumps(jsonDump, indent=2))
+
 def createCode():
+    global code
     geboorte = geboorteVar.get()
     geslacht = geslachtVar.get()
     sport = sportVar.get()
     sportList = list(sportVar.get())
     naam = list(naamVar.get())
 
-    code += geboorte
+    code += str(geboorte)
     code += naam[0]
     if geslacht == "Man":
         code += "M"
